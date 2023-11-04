@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "parcel build index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel index.html"
   },
@@ -14,6 +15,7 @@
     "process": "^0.11.10"
   },
   "dependencies": {
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

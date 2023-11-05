@@ -1,52 +1,7 @@
 import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
 
-const moviesData = [
-  {
-    id: 1,
-    name: "Iron Man",
-    image: "https://shorturl.at/ehvF3",
-    genre: "superhero",
-    release: 2012,
-  },
-  {
-    id: 2,
-    name: "Captain America",
-    image: "https://shorturl.at/fvDS6",
-    genre: "superhero",
-    release: 2013,
-  },
-  {
-    id: 3,
-    name: "Thor",
-    image: "https://shorturl.at/jxzQR",
-    genre: "superhero",
-    release: 2014,
-  },
-];
 
-const tempWatchedData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-    runtime: 148,
-    imdbRating: 8.8,
-    userRating: 10,
-  },
-  {
-    imdbID: "tt0088763",
-    Title: "Back to the Future",
-    Year: "1985",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
-    runtime: 116,
-    imdbRating: 8.5,
-    userRating: 9,
-  },
-];
 
 const average = (arr) => arr.reduce((acc, curr) => acc + curr / arr.length, 0);
 
@@ -95,7 +50,7 @@ const App = () => {
       setError("");
 
       const data = await fetch(
-        `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+        `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
         { signal: controller.signal }
       );
       // console.log(data);
@@ -108,8 +63,10 @@ const App = () => {
       setUpdateMovie(json?.Search);
       setError("");
     } catch (err) {
-      console.log(err);
-      setError(err?.message);
+      if (err.name !== "AbortError") {
+        console.log(err.message);
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -292,7 +249,7 @@ const MoviesInfo = ({
   }, []);
   async function fetchMovieDetails() {
     const data = await fetch(
-      `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
+      `https://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
     );
     const res = await data.json();
     console.log(res);

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
 
-
 const moviesData = [
   {
     id: 1,
@@ -83,13 +82,21 @@ const App = () => {
 
   useEffect(() => {
     fetchMovies();
+    return function () {
+      controller.abort();
+    };
   }, [query]);
+
+  const controller = new AbortController();
 
   async function fetchMovies() {
     try {
       setLoading(true);
+      setError("");
+
       const data = await fetch(
-        `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+        `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+        { signal: controller.signal }
       );
       // console.log(data);
 
@@ -99,6 +106,7 @@ const App = () => {
       const json = await data?.json();
       // console.log(json);
       setUpdateMovie(json?.Search);
+      setError("");
     } catch (err) {
       console.log(err);
       setError(err?.message);
